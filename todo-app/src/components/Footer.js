@@ -16,6 +16,7 @@ class Footer extends Component{
           <li className="footer-item"><a href="#">Completed</a></li>
         </ul>
       </footer>
+
     );
   }
 }
