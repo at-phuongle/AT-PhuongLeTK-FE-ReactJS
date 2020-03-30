@@ -1,0 +1,56 @@
+.app-wrap {
+  position: relative;
+  width: 40%;
+  height: 500px;
+  margin: 20px auto 0 auto;
+  border-left: 2px solid #cfcbcb;
+  border-right: 2px solid #cfcbcb;
+  border-top: 4px solid #cfcbcb;
+  border-bottom: 4px solid #cfcbcb;
+}
+.app-title {
+  margin: 10px 0;
+  font-size: 32px;
+  color: #0051ff;
+  text-align:center;
+  text-transform:uppercase;
+}
+.add-task{
+  text-align: center;
+  padding: 10px 0;
+  border-top: 1px solid #cfcbcb;
+  border-bottom: 1px solid #cfcbcb;
+}
+.input-task {
+  font-size: 24px;
+  font-style: italic;
+  border: none;
+}
+.todo-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0 10px 20px;
+  border-bottom: 1px solid #cfcbcb;
+}
+.todo-item-complete {
+  text-decoration: line-through;
+  opacity: .3;
+}
+.toggle {
+  width: 18px;
+  height: 18px;
+}
+.todo-name {
+  font-size: 18px;
+}
+.status-task {
+  position: absolute;
+  bottom: 0;
+  padding: 10px 20px 10px 20px;
+  width: 100%;
+  border-top: 1px solid #cfcbcb;
+}
+.status-list{
+  display: flex;
+  justify-content: space-between;
+}
