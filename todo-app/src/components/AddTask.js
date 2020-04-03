@@ -7,25 +7,27 @@ class AddTask extends Component {
       inputValue: ''
     }
   }
-  changeHandler = e => {
-    this.setState({
-      inputValue: e.target.value
-    })
+
+  inputHandler = e => {
+    this.setState({ inputValue: e.target.value })
   }
-  inputTask = e => {
+
+  handleAddNewTask = e => {
     if (e.key === 'Enter') {
-      this.props.addTask(e.target.value);
+      this.props.addNewTask(e.target.value);
       this.setState({ inputValue: '' });
     }
   }
-  selectAllItem = () => {
+
+  handleCompleteAllItem = () => {
     this.props.completeAllItem();
   }
+
   render() {
     return (
       <div className="add-task">
-        <input className="input-task" type="text" placeholder="What needs to be done?" value={this.state.inputValue} onChange={this.changeHandler} onKeyPress={this.inputTask} />
-        <label className="select-all-item" onClick={this.selectAllItem}></label>
+        <input className="input-task" type="text" placeholder="What needs to be done?" value={this.state.inputValue} onChange={this.inputHandler} onKeyPress={this.handleAddNewTask} />
+        <label className="select-all-item" onClick={this.handleCompleteAllItem}></label>
       </div>
     );
   }
