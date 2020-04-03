@@ -21,9 +21,21 @@
   border-bottom: 1px solid #cfcbcb;
 }
 .input-task {
+  position: relative;
+  width: 100%;
   font-size: 24px;
   font-style: italic;
+  text-align: center;
   border: none;
+}
+.select-all-item{
+  position: absolute;
+  left: 20px;
+}
+.select-all-item::before {
+  content: '\2207';
+  font-size: 35px;
+  color: #e6e6e6;
 }
 .todo-list {
   height: 250px;
@@ -32,8 +44,12 @@
 .todo-item {
   display: flex;
   align-items: center;
+  position: relative;
   padding: 10px 0 10px 20px;
   border-bottom: 1px solid #cfcbcb;
+  &:hover .btn-delete-item {
+    display: block;
+  }
 }
 .todo-item-complete {
   text-decoration: line-through;
@@ -46,13 +62,32 @@
 .todo-name {
   font-size: 18px;
 }
+.btn-delete-item {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 10px;
+  bottom: 0;
+  width: 25px;
+  height: 25px;
+  font-weight: bold;
+  margin: auto 0;
+  font-size: 20px;
+  background: none;
+  border: none;
+  color: #e67b7b;
+  transition: color 0.2s ease-out;
+  &:hover {
+    color: #a32121;
+  }
+}
 .page-footer {
   bottom: 0;
   padding: 10px 20px 10px 20px;
   width: 100%;
   border-top: 1px solid #cfcbcb;
-}
-.footer-list {
-  display: flex;
-  justify-content: space-between;
+  &-list {
+    display: flex;
+    justify-content: space-between;
+  }
 }

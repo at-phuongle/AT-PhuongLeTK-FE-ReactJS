@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
-
-// function Footer(props) {
-class Footer extends Component{
-  constructor(props){
+class Footer extends Component {
+  constructor(props) {
     super(props);
+    this.changeTask = this.changeTask.bind(this);
   }
-  render(){
+  changeTask = e => {
+    this.props.showTask(e.target.value);
+  };
+  render() {
     return (
-      // let todos = this.props;
       <footer className="page-footer">
-        <ul className="footer-list">
-          <li className="footer-item">{this.props.todo.length} iteams left</li>
-          <li className="footer-item"><a href="#">All task</a></li>
-          <li className="footer-item"><a href="#">Active</a></li>
-          <li className="footer-item"><a href="#">Completed</a></li>
+        <ul className="page-footer-list">
+          <li className="page-footer-item">{this.props.item.length} iteam(s) left</li>
+          <li className="page-footer-item"><button value='1' onClick={this.changeTask}>All task</button></li>
+          <li className="page-footer-item"><button value='2' onClick={this.changeTask}>Active</button></li>
+          <li className="page-footer-item"><button value='3' onClick={this.changeTask}>Completed</button></li>
         </ul>
       </footer>
-
     );
   }
 }
