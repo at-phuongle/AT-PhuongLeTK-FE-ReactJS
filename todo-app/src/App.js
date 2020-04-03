@@ -23,6 +23,7 @@ class App extends Component {
   componentDidMount() {
     this.setState({ arrTodo: arr });
   }
+  //add new task todo to list
   addTask = newTaskName => {
     if (!newTaskName) {
       alert('Please input something!');
@@ -32,6 +33,7 @@ class App extends Component {
       this.setState({ arrTodo: arr });
     }
   }
+  //show by category condition
   showTask = (e) => {
     let checkArrTodo = [];
     switch (parseInt(e)) {
@@ -49,6 +51,7 @@ class App extends Component {
     }
     this.setState({ arrTodo: checkArrTodo });
   }
+  //click complete item
   completeItem = id => {
     arr = this.state.arrTodo.map(item => {
       if (item.id === parseInt(id)) {
@@ -58,6 +61,7 @@ class App extends Component {
     })
     this.setState({ arrTodo: arr });
   }
+  //click complete/uncomplete all item
   completeAllItem = () => {
     let check = arr.find(item => item.isComplete === false);
     if (check) {
@@ -71,6 +75,7 @@ class App extends Component {
     }
     this.setState({ arrTodo: arr });
   }
+  //click delete item
   deleteItem = id => {
     arr.splice(arr.find(item => item.id === parseInt(id)), 1);
     this.setState({ arrTodo: arr });
