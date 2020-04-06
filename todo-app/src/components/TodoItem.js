@@ -3,6 +3,13 @@ import React, { Component } from 'react';
 class TodoItem extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      checkBoxValue: this.props.item.id
+    }
+  }
+
+  checkBoxHandle = e => {
+    this.setState({ checkBoxValue: e.target.value })
   }
 
   handleCompleteItem = e => {
@@ -20,7 +27,7 @@ class TodoItem extends Component {
     }
     return (
       <li className={classNameDiv}>
-        <input className="toggle" type="checkbox" value={this.props.item.id} onClick={this.handleCompleteItem} />
+        <input className="toggle" type="checkbox" checked={this.props.item.status} onChange={this.checkBoxHandle} value={this.state.checkBoxValue} onClick={this.handleCompleteItem} />
         <label className="todo-name">{this.props.item.name}</label>
         <button className="btn btn-delete-item" value={this.props.item.id} onClick={this.handleDeleteItem}>X</button>
       </li>
@@ -28,4 +35,4 @@ class TodoItem extends Component {
   }
 }
 
-export default TodoItem;
+export { TodoItem };

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TodoItem from './TodoItem';
+import { TodoItem } from './TodoItem';
 
 class TodoList extends Component {
   constructor(props) {
@@ -17,4 +17,4 @@ class TodoList extends Component {
   }
 }
 
-export default TodoList;
+export { TodoList };

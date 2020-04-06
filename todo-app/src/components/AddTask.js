@@ -33,4 +33,4 @@ class AddTask extends Component {
   }
 }
 
-export default AddTask;
+export { AddTask };
