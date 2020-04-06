@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class TodoItem extends Component {
+export class TodoItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -34,5 +34,3 @@ class TodoItem extends Component {
     );
   }
 }
-
-export { TodoItem };

@@ -11,7 +11,7 @@ let listTodo = [
   { id: 2, name: 'Writing', status: false },
   { id: 3, name: 'Speaking', status: true }
 ]
-class App extends Component {
+export class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -111,5 +111,3 @@ class App extends Component {
     );
   }
 }
-
-export { App };
