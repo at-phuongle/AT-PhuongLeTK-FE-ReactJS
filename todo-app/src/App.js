@@ -35,7 +35,7 @@ export class App extends Component {
     if (!newTaskName) {
       alert('Please input something!');
     } else {
-      let newTask = { id: listTodo[listTodo.length - 1].id + 1, name: newTaskName, status: true };
+      let newTask = { id: listTodo.length + 1, name: newTaskName, status: true };
       listTodo = listTodo.concat(newTask);
       this.setState({ arrTodo: listTodo });
     }
