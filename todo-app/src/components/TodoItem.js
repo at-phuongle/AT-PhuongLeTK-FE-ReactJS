@@ -22,12 +22,12 @@ export class TodoItem extends Component {
 
   render() {
     let classNameDiv = 'todo-item';
-    if (this.props.item.status) {
+    if (!this.props.item.status) {
       classNameDiv += ' todo-item-complete';
     }
     return (
       <li className={classNameDiv}>
-        <input className="toggle" type="checkbox" checked={this.props.item.status} onChange={this.checkBoxHandle} value={this.state.checkBoxValue} onClick={this.handleCompleteItem} />
+        <input className="toggle" type="checkbox" checked={!this.props.item.status} onChange={this.checkBoxHandle} value={this.state.checkBoxValue} onClick={this.handleCompleteItem} />
         <label className="todo-name">{this.props.item.name}</label>
         <button className="btn btn-delete-item" value={this.props.item.id} onClick={this.handleDeleteItem}>X</button>
       </li>

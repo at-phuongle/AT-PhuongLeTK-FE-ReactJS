@@ -6,16 +6,18 @@ import { TodoList } from './components/TodoList';
 import { Helmet } from 'react-helmet';
 
 let listTodo = [
-  { id: 0, name: 'Reading', status: false },
-  { id: 1, name: 'Listening', status: true },
-  { id: 2, name: 'Writing', status: false },
-  { id: 3, name: 'Speaking', status: true }
+  { id: 0, name: 'Reading', status: true },
+  { id: 1, name: 'Listening', status: false },
+  { id: 2, name: 'Writing', status: true },
+  { id: 3, name: 'Speaking', status: false }
 ]
+localStorage.setItem('arrTodo', JSON.stringify(listTodo));
+let listTodos = JSON.parse(localStorage.getItem('arrTodo'));
 export class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      arrTodo: listTodo,
+      arrTodo: listTodos,
     }
     this.completeItem = this.completeItem.bind(this);
     this.addNewTask = this.addNewTask.bind(this);
@@ -23,12 +25,17 @@ export class App extends Component {
     this.showListByStatus = this.showListByStatus.bind(this);
   }
 
+  componentDidUpdate() {
+    localStorage.setItem('arrTodo', JSON.stringify(listTodo));
+    listTodos = JSON.parse(localStorage.getItem('arrTodo'));
+  }
+
   //add new task todo to list
   addNewTask = newTaskName => {
     if (!newTaskName) {
       alert('Please input something!');
     } else {
-      let newTask = { id: listTodo[listTodo.length - 1].id + 1, name: newTaskName, status: false };
+      let newTask = { id: listTodo[listTodo.length - 1].id + 1, name: newTaskName, status: true };
       listTodo = listTodo.concat(newTask);
       this.setState({ arrTodo: listTodo });
     }
@@ -42,10 +49,10 @@ export class App extends Component {
         checkArrTodo = listTodo;
         break;
       case 'active':
-        checkArrTodo = listTodo.filter(item => !item.status)
+        checkArrTodo = listTodo.filter(item => item.status)
         break;
       case 'complete':
-        checkArrTodo = listTodo.filter(item => item.status)
+        checkArrTodo = listTodo.filter(item => !item.status)
         break;
       default:
         checkArrTodo = listTodo;
@@ -66,14 +73,15 @@ export class App extends Component {
 
   //click complete/uncomplete all item
   completeAllItem = () => {
-    let check = listTodo.find(item => item.status === false);
+    let check = listTodo.find(item => item.status === true);
     if (check) {
       listTodo = listTodo.map(item => {
-        return { ...item, status: true }
+        return { ...item, status: false }
       })
+
     } else {
       listTodo = listTodo.map(item => {
-        return { ...item, status: false }
+        return { ...item, status: true }
       })
     }
     this.setState({ arrTodo: listTodo });
@@ -85,9 +93,15 @@ export class App extends Component {
     this.setState({ arrTodo: listTodo });
   }
 
+  //clear all item
+  clearAllItem = () => {
+    listTodo = [];
+    this.setState({ arrTodo: listTodo });
+    console.log('aaaaaa');
+  }
   //count item active
   countItemActive = () => {
-    return this.state.arrTodo.filter(item => !item.status).length;
+    return listTodo.filter(item => item.status).length;
   }
 
   render() {
@@ -104,7 +118,7 @@ export class App extends Component {
               <AddTask addNewTask={this.addNewTask} completeAllItem={this.completeAllItem} />
               <TodoList arrTodo={this.state.arrTodo} completeItem={this.completeItem} deleteItem={this.deleteItem} />
             </main>
-            <Footer item={this.state.arrTodo} showListByStatus={this.showListByStatus} />
+            <Footer item={this.state.arrTodo} showListByStatus={this.showListByStatus} clearAllItem={this.clearAllItem} />
           </div>
         </div>
       </div>
