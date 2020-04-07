@@ -11,13 +11,12 @@ let listTodo = [
   { id: 2, name: 'Writing', status: true },
   { id: 3, name: 'Speaking', status: false }
 ]
-localStorage.setItem('arrTodo', JSON.stringify(listTodo));
-let listTodos = JSON.parse(localStorage.getItem('arrTodo'));
+
 export class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      arrTodo: listTodos,
+      arrTodo: []
     }
     this.completeItem = this.completeItem.bind(this);
     this.addNewTask = this.addNewTask.bind(this);
@@ -25,9 +24,19 @@ export class App extends Component {
     this.showListByStatus = this.showListByStatus.bind(this);
   }
 
-  componentDidUpdate() {
-    localStorage.setItem('arrTodo', JSON.stringify(listTodo));
-    listTodos = JSON.parse(localStorage.getItem('arrTodo'));
+  componentDidMount() {
+    let listTodos = JSON.parse(localStorage.getItem('arrTodoLocal'));
+    if (listTodos) {
+      listTodo = listTodos;
+      this.setState({ arrTodo: listTodo });
+    } else {
+      localStorage.setItem('arrTodoLocal', JSON.stringify(listTodo));
+    }
+  }
+
+  componentDidUpdate(prevProp,prevState) {
+    console.log(prevState);
+    localStorage.setItem('arrTodoLocal', JSON.stringify(listTodo));
   }
 
   //add new task todo to list
@@ -35,14 +44,19 @@ export class App extends Component {
     if (!newTaskName) {
       alert('Please input something!');
     } else {
-      let newTask = { id: listTodo.length + 1, name: newTaskName, status: true };
+      let newTask;
+      if (listTodo.length !== 0) {
+        newTask = { id: listTodo[listTodo.length - 1].id + 1, name: newTaskName, status: true };
+      } else {
+        newTask = { id: 0, name: newTaskName, status: true };
+      }
       listTodo = listTodo.concat(newTask);
       this.setState({ arrTodo: listTodo });
     }
   }
 
   //show by category condition
-  showListByStatus = (e) => {
+  showListByStatus = e => {
     let checkArrTodo = [];
     switch (e) {
       case 'all':
@@ -62,7 +76,7 @@ export class App extends Component {
 
   //click complete item
   completeItem = id => {
-    listTodo = this.state.arrTodo.map(item => {
+    listTodo = listTodo.map(item => {
       if (item.id === parseInt(id)) {
         return { ...item, status: !item.status };
       }
@@ -89,15 +103,16 @@ export class App extends Component {
 
   //click delete item
   deleteItem = id => {
-    listTodo.splice(listTodo.find(item => item.id === parseInt(id)), 1);
-    this.setState({ arrTodo: listTodo });
+    listTodo = listTodo.filter(item => item.id !== parseInt(id))
+    this.setState({
+      arrTodo: listTodo
+    })
   }
 
   //clear all item
   clearAllItem = () => {
     listTodo = [];
     this.setState({ arrTodo: listTodo });
-    console.log('aaaaaa');
   }
   //count item active
   countItemActive = () => {

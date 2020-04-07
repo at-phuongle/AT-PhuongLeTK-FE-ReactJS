@@ -4,7 +4,7 @@ export class Footer extends Component {
     super(props);
   }
 
-  countTaskByStatus = e => {
+  countTaskByStatus = () => {
     return this.props.item.filter(item => item.status).length;
   }
 
