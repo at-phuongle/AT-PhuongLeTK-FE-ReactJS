@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import AddTask from './components/AddTask';
-import Footer from './components/Footer';
-import Header from './components/Header';
-import TodoList from './components/TodoList';
+import { AddTask } from './components/AddTask';
+import { Footer } from './components/Footer';
+import { Header } from './components/Header';
+import { TodoList } from './components/TodoList';
+import { Helmet } from 'react-helmet';
 
 let listTodo = [
   { id: 0, name: 'Reading', status: false },
@@ -10,8 +11,7 @@ let listTodo = [
   { id: 2, name: 'Writing', status: false },
   { id: 3, name: 'Speaking', status: true }
 ]
-
-class App extends Component {
+export class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,7 +28,7 @@ class App extends Component {
     if (!newTaskName) {
       alert('Please input something!');
     } else {
-      let newTask = { id: listTodo[listTodo.length-1].id+1, name: newTaskName, status: false };
+      let newTask = { id: listTodo[listTodo.length - 1].id + 1, name: newTaskName, status: false };
       listTodo = listTodo.concat(newTask);
       this.setState({ arrTodo: listTodo });
     }
@@ -85,15 +85,24 @@ class App extends Component {
     this.setState({ arrTodo: listTodo });
   }
 
+  //count item active
+  countItemActive = () => {
+    return this.state.arrTodo.filter(item => !item.status).length;
+  }
+
   render() {
+    let count = 'Todo (' + this.countItemActive() + ')';
     return (
       <div className="App">
+        <Helmet>
+          <title>{count}</title>
+        </Helmet>
         <div className="container">
           <div className="app-wrap">
             <Header />
             <main>
               <AddTask addNewTask={this.addNewTask} completeAllItem={this.completeAllItem} />
-              <TodoList arrTodo={this.state.arrTodo} completeItem={this.completeItem} deleteItem={this.deleteItem}/>
+              <TodoList arrTodo={this.state.arrTodo} completeItem={this.completeItem} deleteItem={this.deleteItem} />
             </main>
             <Footer item={this.state.arrTodo} showListByStatus={this.showListByStatus} />
           </div>
@@ -102,5 +111,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;
