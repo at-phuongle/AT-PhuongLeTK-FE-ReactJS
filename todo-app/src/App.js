@@ -5,18 +5,15 @@ import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Helmet } from 'react-helmet';
 
-let listTodo = [
-  { id: 0, name: 'Reading', status: true },
-  { id: 1, name: 'Listening', status: false },
-  { id: 2, name: 'Writing', status: true },
-  { id: 3, name: 'Speaking', status: false }
-]
-
+let listTodo;
 export class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      arrTodo: listTodo,
+      arrTodo: [{ id: 0, name: 'Reading', status: true },
+      { id: 1, name: 'Listening', status: false },
+      { id: 2, name: 'Writing', status: true },
+      { id: 3, name: 'Speaking', status: false }],
       show: 'all'
     }
     this.completeItem = this.completeItem.bind(this);
@@ -26,12 +23,11 @@ export class App extends Component {
   }
 
   componentDidMount() {
-    let listTodos = JSON.parse(localStorage.getItem('arrTodoLocal'));
-    if (listTodos) {
-      listTodo = listTodos;
+    let listTodo = JSON.parse(localStorage.getItem('arrTodoLocal'));
+    if (listTodo) {
       this.setState({ arrTodo: listTodo });
     } else {
-      localStorage.setItem('arrTodoLocal', JSON.stringify(listTodo));
+      localStorage.setItem('arrTodoLocal', JSON.stringify(this.state.arrTodo));
     }
   }
 
@@ -43,23 +39,24 @@ export class App extends Component {
 
   //add new task todo to list
   addNewTask = newTaskName => {
+    const { arrTodo } = this.state;
     if (!newTaskName) {
       alert('Please input something!');
     } else {
       let newTask;
-      if (listTodo.length !== 0) {
-        newTask = { id: listTodo[listTodo.length - 1].id + 1, name: newTaskName, status: true };
-      } else {
+      if (!arrTodo.length) {
         newTask = { id: 0, name: newTaskName, status: true };
+      } else {
+        newTask = { id: arrTodo[arrTodo.length - 1].id + 1, name: newTaskName, status: true };
       }
-      listTodo = listTodo.concat(newTask);
+      listTodo = arrTodo.concat(newTask);
       this.setState({ arrTodo: listTodo });
     }
   }
 
   //click complete item
   completeItem = id => {
-    listTodo = listTodo.map(item => {
+    listTodo = this.state.arrTodo.map(item => {
       if (item.id === parseInt(id)) {
         return { ...item, status: !item.status };
       }
@@ -70,14 +67,14 @@ export class App extends Component {
 
   //click complete/uncomplete all item
   completeAllItem = () => {
-    let check = listTodo.find(item => item.status === true);
+    const { arrTodo } = this.state;
+    let check = arrTodo.find(item => item.status === true);
     if (check) {
-      listTodo = listTodo.map(item => {
+      listTodo = arrTodo.map(item => {
         return { ...item, status: false }
       })
-
     } else {
-      listTodo = listTodo.map(item => {
+      listTodo = arrTodo.map(item => {
         return { ...item, status: true }
       })
     }
@@ -86,20 +83,23 @@ export class App extends Component {
 
   //click delete item
   deleteItem = id => {
-    listTodo = listTodo.filter(item => item.id !== parseInt(id))
+    listTodo = this.state.arrTodo.filter(item => item.id !== parseInt(id));
     this.setState({
       arrTodo: listTodo
     })
   }
 
   //clear all item
-  clearAllItem = () => {
-    listTodo = [];
-    this.setState({ arrTodo: listTodo });
+  clearAllItemComplete = () => {
+    listTodo = this.state.arrTodo.filter(item => item.status);
+    this.setState({
+      arrTodo: listTodo
+    })
   }
+
   //count item active
   countItemActive = () => {
-    return listTodo.filter(item => item.status).length;
+    return this.state.arrTodo.filter(item => item.status).length;
   }
 
   showListByStatus = (changeShow) => {
@@ -121,6 +121,7 @@ export class App extends Component {
       }
     }
     let count = 'Todo (' + this.countItemActive() + ')';
+    let countItem = this.countItemActive() + ' items left'
     return (
       <div className="App">
         <Helmet>
@@ -133,7 +134,7 @@ export class App extends Component {
               <AddTask addNewTask={this.addNewTask} completeAllItem={this.completeAllItem} />
               <TodoList arrTodo={todoByStatus(show)} completeItem={this.completeItem} deleteItem={this.deleteItem} />
             </main>
-            <Footer item={this.state.arrTodo} showListByStatus={this.showListByStatus} clearAllItem={this.clearAllItem} />
+            <Footer countItem={countItem} showListByStatus={this.showListByStatus} clearAllItemComplete={this.clearAllItemComplete} />
           </div>
         </div>
       </div>
