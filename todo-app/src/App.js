@@ -5,17 +5,16 @@ import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Helmet } from 'react-helmet';
 
-let listTodo = [
-  { id: 0, name: 'Reading', status: false },
-  { id: 1, name: 'Listening', status: true },
-  { id: 2, name: 'Writing', status: false },
-  { id: 3, name: 'Speaking', status: true }
-]
+let listTodo;
 export class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      arrTodo: listTodo,
+      arrTodo: [{ id: 0, name: 'Reading', status: true },
+      { id: 1, name: 'Listening', status: false },
+      { id: 2, name: 'Writing', status: true },
+      { id: 3, name: 'Speaking', status: false }],
+      show: 'all'
     }
     this.completeItem = this.completeItem.bind(this);
     this.addNewTask = this.addNewTask.bind(this);
@@ -23,34 +22,36 @@ export class App extends Component {
     this.showListByStatus = this.showListByStatus.bind(this);
   }
 
-  //add new task todo to list
-  addNewTask = newTaskName => {
-    if (!newTaskName) {
-      alert('Please input something!');
-    } else {
-      let newTask = { id: listTodo[listTodo.length - 1].id + 1, name: newTaskName, status: false };
-      listTodo = listTodo.concat(newTask);
+  componentDidMount() {
+    let listTodo = JSON.parse(localStorage.getItem('arrTodoLocal'));
+    if (listTodo) {
       this.setState({ arrTodo: listTodo });
+    } else {
+      localStorage.setItem('arrTodoLocal', JSON.stringify(this.state.arrTodo));
     }
   }
 
-  //show by category condition
-  showListByStatus = (e) => {
-    let checkArrTodo = [];
-    switch (e) {
-      case 'all':
-        checkArrTodo = listTodo;
-        break;
-      case 'active':
-        checkArrTodo = listTodo.filter(item => !item.status)
-        break;
-      case 'complete':
-        checkArrTodo = listTodo.filter(item => item.status)
-        break;
-      default:
-        checkArrTodo = listTodo;
+  componentDidUpdate(prevProp, prevState) {
+    if (prevState.arrTodo !== this.state.arrTodo) {
+      localStorage.setItem('arrTodoLocal', JSON.stringify(this.state.arrTodo));
     }
-    this.setState({ arrTodo: checkArrTodo });
+  }
+
+  //add new task todo to list
+  addNewTask = newTaskName => {
+    const { arrTodo } = this.state;
+    if (!newTaskName) {
+      alert('Please input something!');
+    } else {
+      let newTask;
+      if (!arrTodo.length) {
+        newTask = { id: 0, name: newTaskName, status: true };
+      } else {
+        newTask = { id: arrTodo[arrTodo.length - 1].id + 1, name: newTaskName, status: true };
+      }
+      listTodo = arrTodo.concat(newTask);
+      this.setState({ arrTodo: listTodo });
+    }
   }
 
   //click complete item
@@ -66,14 +67,15 @@ export class App extends Component {
 
   //click complete/uncomplete all item
   completeAllItem = () => {
-    let check = listTodo.find(item => item.status === false);
+    const { arrTodo } = this.state;
+    let check = arrTodo.find(item => item.status === true);
     if (check) {
-      listTodo = listTodo.map(item => {
-        return { ...item, status: true }
+      listTodo = arrTodo.map(item => {
+        return { ...item, status: false }
       })
     } else {
-      listTodo = listTodo.map(item => {
-        return { ...item, status: false }
+      listTodo = arrTodo.map(item => {
+        return { ...item, status: true }
       })
     }
     this.setState({ arrTodo: listTodo });
@@ -81,17 +83,45 @@ export class App extends Component {
 
   //click delete item
   deleteItem = id => {
-    listTodo.splice(listTodo.find(item => item.id === parseInt(id)), 1);
-    this.setState({ arrTodo: listTodo });
+    listTodo = this.state.arrTodo.filter(item => item.id !== parseInt(id));
+    this.setState({
+      arrTodo: listTodo
+    })
+  }
+
+  //clear all item
+  clearAllItemComplete = () => {
+    listTodo = this.state.arrTodo.filter(item => item.status);
+    this.setState({
+      arrTodo: listTodo
+    })
   }
 
   //count item active
   countItemActive = () => {
-    return this.state.arrTodo.filter(item => !item.status).length;
+    return this.state.arrTodo.filter(item => item.status).length;
   }
 
+  showListByStatus = (changeShow) => {
+    this.setState({
+      show: changeShow
+    });
+  };
+
   render() {
+    const { show } = this.state
+    const todoByStatus = show => {
+      switch (show) {
+        case 'active':
+          return this.state.arrTodo.filter(item => item.status)
+        case 'complete':
+          return this.state.arrTodo.filter(item => !item.status)
+        default:
+          return this.state.arrTodo;
+      }
+    }
     let count = 'Todo (' + this.countItemActive() + ')';
+    let countItem = this.countItemActive() + ' items left'
     return (
       <div className="App">
         <Helmet>
@@ -102,9 +132,9 @@ export class App extends Component {
             <Header />
             <main>
               <AddTask addNewTask={this.addNewTask} completeAllItem={this.completeAllItem} />
-              <TodoList arrTodo={this.state.arrTodo} completeItem={this.completeItem} deleteItem={this.deleteItem} />
+              <TodoList arrTodo={todoByStatus(show)} completeItem={this.completeItem} deleteItem={this.deleteItem} />
             </main>
-            <Footer item={this.state.arrTodo} showListByStatus={this.showListByStatus} />
+            <Footer countItem={countItem} showListByStatus={this.showListByStatus} clearAllItemComplete={this.clearAllItemComplete} />
           </div>
         </div>
       </div>

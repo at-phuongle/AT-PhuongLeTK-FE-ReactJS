@@ -28,12 +28,12 @@
   text-align: center;
   border: none;
 }
-.select-all-item{
+.select-all-item {
   position: absolute;
   left: 20px;
 }
 .select-all-item::before {
-  content: '\2207';
+  content: "\2207";
   font-size: 35px;
   color: #e6e6e6;
 }
