@@ -35,8 +35,11 @@ export class App extends Component {
   }
 
   componentDidUpdate(prevProp,prevState) {
-    console.log(prevState);
-    localStorage.setItem('arrTodoLocal', JSON.stringify(listTodo));
+    if(prevState.arrTodo !== listTodo){
+      localStorage.setItem('arrTodoLocal', JSON.stringify(this.state.arrTodo));
+    } else {
+      this.state.arrTodo = prevState.arrTodo;
+    }
   }
 
   //add new task todo to list
