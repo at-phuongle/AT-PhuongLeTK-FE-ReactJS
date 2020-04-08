@@ -17,7 +17,7 @@ export class App extends Component {
     super(props);
     this.state = {
       arrTodo: listTodo,
-      show: 'All'
+      show: 'all'
     }
     this.completeItem = this.completeItem.bind(this);
     this.addNewTask = this.addNewTask.bind(this);
@@ -102,9 +102,9 @@ export class App extends Component {
     return listTodo.filter(item => item.status).length;
   }
 
-  showListByStatus = (show = '') => {
+  showListByStatus = (changeShow) => {
     this.setState({
-      show
+      show: changeShow
     });
   };
 
