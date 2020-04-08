@@ -16,7 +16,8 @@ export class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      arrTodo: []
+      arrTodo: listTodo,
+      show: 'All'
     }
     this.completeItem = this.completeItem.bind(this);
     this.addNewTask = this.addNewTask.bind(this);
@@ -34,11 +35,9 @@ export class App extends Component {
     }
   }
 
-  componentDidUpdate(prevProp,prevState) {
-    if(prevState.arrTodo !== listTodo){
+  componentDidUpdate(prevProp, prevState) {
+    if (prevState.arrTodo !== this.state.arrTodo) {
       localStorage.setItem('arrTodoLocal', JSON.stringify(this.state.arrTodo));
-    } else {
-      this.state.arrTodo = prevState.arrTodo;
     }
   }
 
@@ -56,25 +55,6 @@ export class App extends Component {
       listTodo = listTodo.concat(newTask);
       this.setState({ arrTodo: listTodo });
     }
-  }
-
-  //show by category condition
-  showListByStatus = e => {
-    let checkArrTodo = [];
-    switch (e) {
-      case 'all':
-        checkArrTodo = listTodo;
-        break;
-      case 'active':
-        checkArrTodo = listTodo.filter(item => item.status)
-        break;
-      case 'complete':
-        checkArrTodo = listTodo.filter(item => !item.status)
-        break;
-      default:
-        checkArrTodo = listTodo;
-    }
-    this.setState({ arrTodo: checkArrTodo });
   }
 
   //click complete item
@@ -122,7 +102,24 @@ export class App extends Component {
     return listTodo.filter(item => item.status).length;
   }
 
+  showListByStatus = (show = '') => {
+    this.setState({
+      show
+    });
+  };
+
   render() {
+    const { show } = this.state
+    const todoByStatus = show => {
+      switch (show) {
+        case 'active':
+          return this.state.arrTodo.filter(item => item.status)
+        case 'complete':
+          return this.state.arrTodo.filter(item => !item.status)
+        default:
+          return this.state.arrTodo;
+      }
+    }
     let count = 'Todo (' + this.countItemActive() + ')';
     return (
       <div className="App">
@@ -134,7 +131,7 @@ export class App extends Component {
             <Header />
             <main>
               <AddTask addNewTask={this.addNewTask} completeAllItem={this.completeAllItem} />
-              <TodoList arrTodo={this.state.arrTodo} completeItem={this.completeItem} deleteItem={this.deleteItem} />
+              <TodoList arrTodo={todoByStatus(show)} completeItem={this.completeItem} deleteItem={this.deleteItem} />
             </main>
             <Footer item={this.state.arrTodo} showListByStatus={this.showListByStatus} clearAllItem={this.clearAllItem} />
           </div>
