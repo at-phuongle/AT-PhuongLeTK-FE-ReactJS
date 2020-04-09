@@ -13,11 +13,12 @@ export function App() {
   ]);
   const [status, setStatus] = useState('all');
   const countItemActive = arrTodo.filter(item => item.status).length;
-  
+
   useEffect(() => {
     document.title = 'Todo (' + countItemActive + ')';
-  }
-  )
+    console.log('chạy');
+    
+  }, [countItemActive])
 
   function showItemByStatus(status) {
     switch (status) {
