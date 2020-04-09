@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { AddTodo } from './components/AddTodo';
 import { TodoList } from './components/TodoList';
@@ -12,6 +12,12 @@ export function App() {
     { id: 3, name: 'Speaking', status: true }
   ]);
   const [status, setStatus] = useState('all');
+  const countItemActive = arrTodo.filter(item => item.status).length;
+  
+  useEffect(() => {
+    document.title = 'Todo (' + countItemActive + ')';
+  }
+  )
 
   function showItemByStatus(status) {
     switch (status) {
@@ -34,24 +40,34 @@ export function App() {
       } else {
         newTask = { id: arrTodo[arrTodo.length - 1].id + 1, name: nameNewTodo, status: true };
       }
-      const newArrTodo = arrTodo.concat(newTask);
-      setArrTodo(newArrTodo);
+      setArrTodo(arrTodo.concat(newTask));
     }
   }
 
   function completeItem(id) {
-    const newArrTodo = arrTodo.map(item => {
+    setArrTodo(arrTodo.map(item => {
       if (item.id === parseInt(id)) {
         return { ...item, status: !item.status }
       }
       return item;
-    })
-    setArrTodo(newArrTodo);
+    }))
   }
 
   function deleteItem(id) {
-    const newArrTodo = arrTodo.filter(item => item.id !== parseInt(id));
-    setArrTodo(newArrTodo);
+    setArrTodo(arrTodo.filter(item => item.id !== parseInt(id)));
+  }
+
+  function completeAllItem() {
+    let check = arrTodo.find(item => item.status === true);
+    if (check) {
+      setArrTodo(arrTodo.map(item => {
+        return { ...item, status: false }
+      }))
+    } else {
+      setArrTodo(arrTodo.map(item => {
+        return { ...item, status: true }
+      }))
+    }
   }
 
   return (
@@ -60,10 +76,10 @@ export function App() {
         <div className="app-wrap">
           <Header />
           <main>
-            <AddTodo addNewTodo={addNewTodo} />
+            <AddTodo addNewTodo={addNewTodo} completeAllItem={completeAllItem} />
             <TodoList arrTodo={showItemByStatus(status)} completeItem={completeItem} deleteItem={deleteItem} />
           </main>
-          <Footer changeStatus={(status)=>{setStatus(status);}}/>
+          <Footer changeStatus={(status) => { setStatus(status); }} />
         </div>
       </div>
     </div>
