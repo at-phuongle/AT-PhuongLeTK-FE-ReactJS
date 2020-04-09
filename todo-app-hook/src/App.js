@@ -34,13 +34,13 @@ export function App() {
     if (!nameNewTodo) {
       alert('Please input something!');
     } else {
-      let newTask;
+      let newTodo;
       if (!arrTodo.length) {
-        newTask = { id: 0, name: nameNewTodo, status: true };
+        newTodo = { id: 0, name: nameNewTodo, status: true };
       } else {
-        newTask = { id: arrTodo[arrTodo.length - 1].id + 1, name: nameNewTodo, status: true };
+        newTodo = { id: arrTodo[arrTodo.length - 1].id + 1, name: nameNewTodo, status: true };
       }
-      setArrTodo(arrTodo.concat(newTask));
+      setArrTodo(arrTodo.concat(newTodo));
     }
   }
 
@@ -79,7 +79,7 @@ export function App() {
             <AddTodo addNewTodo={addNewTodo} completeAllItem={completeAllItem} />
             <TodoList arrTodo={showItemByStatus(status)} completeItem={completeItem} deleteItem={deleteItem} />
           </main>
-          <Footer changeStatus={(status) => { setStatus(status); }} />
+          <Footer countItemActive={countItemActive} changeStatus={(status) => { setStatus(status); }} />
         </div>
       </div>
     </div>
