@@ -16,8 +16,6 @@ export function App() {
 
   useEffect(() => {
     document.title = 'Todo (' + countItemActive + ')';
-    console.log('chạy');
-    
   }, [countItemActive])
 
   function showItemByStatus(status) {
