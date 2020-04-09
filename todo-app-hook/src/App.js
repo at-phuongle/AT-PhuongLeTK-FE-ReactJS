@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './App.css';
 import { Header } from './components/Header';
 import { AddTodo } from './components/AddTodo';
 import { TodoList } from './components/TodoList';
@@ -12,6 +11,18 @@ export function App() {
     { id: 2, name: 'Writing', status: false },
     { id: 3, name: 'Speaking', status: true }
   ]);
+  const [status, setStatus] = useState('all');
+
+  function showItemByStatus(status) {
+    switch (status) {
+      case 'active':
+        return arrTodo.filter(item => item.status);
+      case 'complete':
+        return arrTodo.filter(item => !item.status);
+      default:
+        return arrTodo
+    }
+  }
 
   function addNewTodo(nameNewTodo) {
     if (!nameNewTodo) {
@@ -49,10 +60,10 @@ export function App() {
         <div className="app-wrap">
           <Header />
           <main>
-            <AddTodo addNewTodo={addNewTodo}/>
-            <TodoList arrTodo={arrTodo} completeItem={completeItem} deleteItem={deleteItem} />
+            <AddTodo addNewTodo={addNewTodo} />
+            <TodoList arrTodo={showItemByStatus(status)} completeItem={completeItem} deleteItem={deleteItem} />
           </main>
-          <Footer />
+          <Footer changeStatus={(status)=>{setStatus(status);}}/>
         </div>
       </div>
     </div>
