@@ -14,6 +14,19 @@ export function App() {
   const [status, setStatus] = useState('all');
   const countItemActive = arrTodo.filter(item => item.status).length;
 
+  useEffect(()=>{
+      let getarrTodo = JSON.parse(localStorage.getItem('arrTodoLocal'));
+      if (getarrTodo) {
+        setArrTodo(getarrTodo);
+      } else {
+        localStorage.setItem('arrTodoLocal', JSON.stringify(arrTodo));
+      }
+  },[])
+
+  useEffect(() => {
+    localStorage.setItem('arrTodoLocal', JSON.stringify(arrTodo));
+  },[arrTodo])
+
   useEffect(() => {
     document.title = 'Todo (' + countItemActive + ')';
   }, [countItemActive])
