@@ -15,9 +15,9 @@ export function App() {
   const countItemActive = arrTodo.filter(item => item.status).length;
 
   useEffect(() => {
-    let getarrTodo = JSON.parse(localStorage.getItem('arrTodoLocal'));
-    if (getarrTodo) {
-      setArrTodo(getarrTodo);
+    let getArrTodo = JSON.parse(localStorage.getItem('arrTodoLocal'));
+    if (getArrTodo) {
+      setArrTodo(getArrTodo);
     }
   }, [])
 
